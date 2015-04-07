@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Pitstop</string>
+    <string name="title_activity_explore">Explore</string>
+
+    <string name="navigation_drawer_open">Open</string>
+    <string name="navigation_drawer_close">Close</string>
+
+    <string name="label">@string/app_name</string>
+
+    <string name="only_one_account_allowed_error">Only one Pitstop account may be signed in at a time, you must remove your current account before adding a new one.</string>
+
+    <string name="search_stub_msg">Looking for something? You have to Explore the map for now.</string>
+
+    <string name="account_stub_msg">You can\&apos;t sign-in just yet! We\&apos;re tinkering Accounts to give you more powerful features and an amazing user experience.</string>
+
+</resources>

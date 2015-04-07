@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:res-auto="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/infoWindow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:animateLayoutChanges="true"
+        android:orientation="vertical"
+        android:paddingLeft="16dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:animateLayoutChanges="true"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:background="@color/black_dividers"
+                android:id="@+id/estImage"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="top"
+                android:layout_marginRight="16dp" />
+
+            <LinearLayout
+                android:layout_marginRight="16dp"
+                android:orientation="vertical"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content">
+
+                <com.devspark.robototextview.widget.RobotoTextView
+                    android:id="@+id/estName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:lines="1"
+                    android:ellipsize="end"
+                    android:gravity="top|left"
+                    android:includeFontPadding="false"
+                    android:textColor="@color/black_text"
+                    res-auto:typeface="roboto_medium"/>
+
+                <com.devspark.robototextview.widget.RobotoTextView
+                    android:layout_marginTop="2dp"
+                    android:id="@+id/brandName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:lines="1"
+                    android:ellipsize="end"
+                    android:gravity="bottom|left"
+                    android:includeFontPadding="false"
+                    android:textColor="@color/light_blue_500"
+                    res-auto:typeface="roboto_medium"/>
+
+                </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:animateLayoutChanges="true"
+            android:orientation="horizontal">
+
+            <com.devspark.robototextview.widget.RobotoTextView
+                android:id="@+id/estDetails"
+                android:textColor="@color/black_secondary_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="14sp"
+                android:ellipsize="end"
+                android:gravity="top|left"
+                android:lines="2"
+                android:includeFontPadding="false"
+                res-auto:typeface="roboto_regular"/>
+
+            <ImageButton
+                android:id="@+id/btnMore"
+                android:padding="16dp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:src="@drawable/ic_open_in_new" />
+
+        </LinearLayout>
+        <!--
+                    <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:animateLayoutChanges="true">
+
+
+                        <ImageButton
+                                android:id="@+id/btnCall"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentLeft="true"
+                                android:layout_centerInParent="true"
+                                android:background="@null"
+                                android:src="@drawable/ic_call_normal"
+                                android:visibility="invisible"/>
+
+                        <ImageButton
+                                android:id="@+id/btnMore"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerInParent="true"
+                                android:background="@null"
+                                android:src="@drawable/ic_launch"
+                                android:visibility="invisible"/>
+
+                    </RelativeLayout>
+                    -->
+    </LinearLayout>
+</merge>

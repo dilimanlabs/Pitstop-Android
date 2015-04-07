@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+       xmlns:res-auto="http://schemas.android.com/apk/res-auto"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent">
+
+    <com.rengwuxian.materialedittext.MaterialEditText
+        android:id="@+id/id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Account ID"
+        android:textSize="16sp"
+        android:inputType="textNoSuggestions"
+        android:textCursorDrawable="@drawable/text_cursor_light_blue_500"
+        res-auto:baseColor="@color/black_text"
+        res-auto:primaryColor="?attr/colorPrimary"/>
+
+
+    <com.rengwuxian.materialedittext.MaterialEditText
+        android:id="@+id/password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Password"
+        android:textSize="16sp"
+        android:inputType="textPassword"
+        android:textCursorDrawable="@drawable/text_cursor_light_blue_500"
+        res-auto:baseColor="@color/black_text"
+        res-auto:primaryColor="?attr/colorPrimary"/>
+
+    <com.rengwuxian.materialedittext.MaterialEditText
+        android:id="@+id/verifyPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Verify Password"
+        android:textSize="16sp"
+        android:inputType="textPassword"
+        android:textCursorDrawable="@drawable/text_cursor_light_blue_500"
+        res-auto:baseColor="@color/black_text"
+        res-auto:primaryColor="?attr/colorPrimary"
+        android:visibility="invisible" />
+
+    <com.rengwuxian.materialedittext.MaterialEditText
+        android:id="@+id/name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Name (Optional)"
+        android:textSize="16sp"
+        android:inputType="text"
+        android:textCursorDrawable="@drawable/text_cursor_light_blue_500"
+        res-auto:baseColor="@color/black_text"
+        res-auto:primaryColor="?attr/colorPrimary"
+        android:visibility="invisible" />
+
+    <com.devspark.robototextview.widget.RobotoButton
+        android:id="@+id/submit"
+        android:textColor="@color/white_text"
+        android:layout_marginTop="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"/>
+
+    <com.devspark.robototextview.widget.RobotoButton
+        android:id="@+id/switchmode"
+        android:textColor="?attr/colorAccent"
+        android:layout_marginTop="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@null"/>
+
+</merge>

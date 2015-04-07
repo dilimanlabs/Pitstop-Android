@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:res-auto="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:background="?attr/colorPrimary"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        res-auto:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        res-auto:titleTextAppearance="@style/TextAppearance.AppCompat.Title"/>
+
+    <EditText
+        android:id="@+id/accountName"
+        android:textColor="@color/black_text"
+        android:textColorHint="@color/black_disabled_or_hint_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:hint="Account Name"
+        android:padding="10dp"
+        />
+
+    <EditText
+        android:id="@+id/accountPassword"
+        android:textColor="@color/black_text"
+        android:textColorHint="@color/black_disabled_or_hint_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:inputType="textPassword"
+        android:hint="Password"
+        android:padding="10dp"
+        />
+
+    <Button
+        android:id="@+id/submit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Sign in"
+        android:padding="10dp"/>
+
+    <TextView
+        android:id="@+id/signUp"
+        android:textColor="@color/black_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="New user?"
+        android:padding="10dp"/>
+
+</LinearLayout>
+

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:res-auto="http://schemas.android.com/apk/res-auto"
+    android:background="@android:color/white"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:background="@android:color/white"
+            android:minHeight="?attr/actionBarSize"
+            res-auto:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            res-auto:titleTextAppearance="@style/TextAppearance.AppCompat.Title"/>
+
+
+        <com.dilimanlabs.pitstop.authentication.widgets.LoginViewWidget
+            android:layout_marginTop="150dp"
+            android:layout_gravity="center|center_horizontal"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_marginBottom="4dp"
+            android:id="@+id/loginWidget"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="visible"/>
+
+        <com.dilimanlabs.pitstop.authentication.widgets.SignUpViewWidget
+            android:layout_marginTop="120dp"
+            android:layout_gravity="center|center_horizontal"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_marginBottom="4dp"
+            android:id="@+id/signUpWidget"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"/>
+
+    </LinearLayout>
+
+
+</ScrollView>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:res-auto="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_gravity="top"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        res-auto:contentInsetStart="@dimen/second_keyline"
+        res-auto:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        res-auto:titleTextAppearance="@style/TextAppearance.AppCompat.Title"/>
+
+    <com.astuetz.PagerSlidingTabStrip
+        android:id="@+id/tabs"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/light_blue_500"
+        res-auto:pstsIndicatorColor="@color/purple_A700"
+        res-auto:pstsUnderlineColor="@color/transparent"
+        res-auto:pstsDividerColor="@color/transparent"
+        res-auto:pstsIndicatorHeight="2dp"
+        res-auto:pstsUnderlineHeight="0dp"
+        res-auto:pstsDividerPadding="0dp"
+        res-auto:pstsTabPaddingLeftRight="12dp"
+        res-auto:pstsScrollOffset="60dp"
+        res-auto:pstsShouldExpand="false"
+        res-auto:pstsTextAllCaps="true"/>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@android:color/white"/>
+
+</LinearLayout>

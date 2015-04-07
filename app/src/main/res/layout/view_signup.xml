@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:res-auto="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/loginWindow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|center_horizontal"
+        android:background="@android:color/white"
+        android:animateLayoutChanges="true"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <EditText
+            android:id="@+id/signUpName"
+            android:textColor="@color/black_text"
+            android:textColorHint="@color/black_disabled_or_hint_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:hint="Account Id"
+            android:inputType="text"
+            android:padding="10dp"
+            />
+
+        <EditText
+            android:id="@+id/signUpAccountName"
+            android:textColor="@color/black_text"
+            android:textColorHint="@color/black_disabled_or_hint_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:hint="Name"
+            android:inputType="textEmailAddress"
+            android:padding="10dp"
+            />
+
+        <EditText
+            android:id="@+id/signUpAccountPassword"
+            android:textColor="@color/black_text"
+            android:textColorHint="@color/black_disabled_or_hint_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:inputType="textPassword"
+            android:hint="Password"
+            android:padding="10dp"
+            />
+
+        <Button
+            android:id="@+id/signUpAccount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="?attr/colorPrimary"
+            android:text="Sign Up"
+            android:padding="10dp"/>
+
+        <TextView android:id="@+id/alreadyMember"
+            android:textColor="@color/black_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:padding="5dp"
+            android:gravity="right"
+            android:text="Already a member?"/>
+
+    </LinearLayout>
+</merge>

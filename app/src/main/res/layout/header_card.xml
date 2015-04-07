@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:res-auto="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom|center_horizontal"
+    android:animateLayoutChanges="true"
+    res-auto:cardBackgroundColor="@android:color/white"
+    res-auto:cardCornerRadius="2dp"
+    res-auto:cardElevation="2dp">
+
+    <LinearLayout
+        android:id="@+id/infoWindow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:animateLayoutChanges="true"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <com.devspark.robototextview.widget.RobotoTextView
+            android:id="@+id/description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:ellipsize="end"
+            android:gravity="top|left"
+            android:includeFontPadding="false"
+            android:textColor="@color/black_secondary_text"
+            res-auto:typeface="roboto_regular"/>
+
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

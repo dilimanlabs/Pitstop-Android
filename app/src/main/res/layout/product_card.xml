@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:res-auto="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom|center_horizontal"
+    android:animateLayoutChanges="true"
+    res-auto:cardBackgroundColor="@android:color/white"
+    res-auto:cardCornerRadius="2dp"
+    res-auto:cardElevation="2dp">
+
+    <LinearLayout
+        android:id="@+id/li"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:animateLayoutChanges="true"
+        android:orientation="vertical"
+        android:paddingLeft="16dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:animateLayoutChanges="true"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:background="@color/black_dividers"
+                android:id="@+id/primaryImage"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="top"
+                android:layout_marginRight="16dp"/>
+
+            <LinearLayout
+                android:layout_marginRight="16dp"
+                android:orientation="vertical"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content">
+
+                <com.devspark.robototextview.widget.RobotoTextView
+                    android:id="@+id/name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:lines="1"
+                    android:ellipsize="end"
+                    android:gravity="top|left"
+                    android:includeFontPadding="false"
+                    android:textColor="@color/black_text"
+                    res-auto:typeface="roboto_medium"/>
+
+                <!--
+                <com.devspark.robototextview.widget.RobotoTextView
+                    android:layout_marginTop="2dp"
+                    android:id="@+id/brandName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:lines="1"
+                    android:ellipsize="end"
+                    android:gravity="bottom|left"
+                    android:includeFontPadding="false"
+                    android:textColor="@color/light_blue_500"
+                    res-auto:typeface="roboto_medium"/>
+                -->
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginRight="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="56dp"
+            android:animateLayoutChanges="true"
+            android:orientation="horizontal">
+
+            <com.devspark.robototextview.widget.RobotoTextView
+                android:id="@+id/description"
+                android:textColor="@color/black_secondary_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="14sp"
+                android:ellipsize="end"
+                android:gravity="top|left"
+                android:includeFontPadding="false"
+                res-auto:typeface="roboto_regular"/>
+
+            <!--
+            <ImageButton
+                android:id="@+id/btnMore"
+                android:padding="16dp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:src="@drawable/ic_open_in_new" />
+            -->
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

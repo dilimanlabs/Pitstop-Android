@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+       xmlns:res-auto="http://schemas.android.com/apk/res-auto"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent">
+
+    <ImageView
+        android:scaleType="center"
+        android:id="@+id/image"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:src="@drawable/ic_person_light"
+        android:background="@drawable/ic_circle"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"/>
+
+    <LinearLayout
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="56dp">
+
+        <LinearLayout
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="16dp"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+
+            <com.devspark.robototextview.widget.RobotoTextView
+                android:id="@+id/name"
+                android:textSize="14sp"
+                android:textColor="@color/white_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                res-auto:typeface="roboto_medium"/>
+
+            <com.devspark.robototextview.widget.RobotoTextView
+                android:id="@+id/id"
+                android:textSize="14sp"
+                android:textColor="@color/white_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                res-auto:typeface="roboto_regular"/>
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/arrow"
+            android:scaleType="center"
+            android:src="@drawable/arrow_drop_down_light"
+            android:layout_width="56dp"
+            android:layout_height="56dp"/>
+
+
+    </LinearLayout>
+
+
+</merge>

@@ -1,0 +1,14 @@
+INSERT INTO Categories (Id, Description, Name, PluralName, PrimaryImage, URL) VALUES (1, '', 'ATM', 'ATM', '', '/categories/aaxxLOvkieO');
+INSERT INTO Categories (Id, Description, Name, PluralName, PrimaryImage, URL) VALUES (2, '', 'Air & Water', 'Air & Water', '', '/categories/aaAmcywTuUu');
+INSERT INTO Categories (Id, Description, Name, PluralName, PrimaryImage, URL) VALUES (3, '', 'Battery', 'Batteries', '', '/categories/aaAmGkukKho');
+INSERT INTO Categories (Id, Description, Name, PluralName, PrimaryImage, URL) VALUES (4, '', 'Carwash', 'Carwash', '', '/categories/aaz7CRz4Do4');
+INSERT INTO Categories (Id, Description, Name, PluralName, PrimaryImage, URL) VALUES (5, '', 'Cash', 'Cash', '', '/categories/aaxFvA6sCei');
+INSERT INTO Categories (Id, Description, Name, PluralName, PrimaryImage, URL) VALUES (6, '', 'Convenience Store', 'Convenience Store', '', '/categories/aaz9Iq08oEK');
+INSERT INTO Categories (Id, Description, Name, PluralName, PrimaryImage, URL) VALUES (7, '', 'Dealership', 'Dealerships', '', '/categories/aaAfmEbcXoy');
+INSERT INTO Categories (Id, Description, Name, PluralName, PrimaryImage, URL) VALUES (8, '', 'Dining', 'Dining', '', '/categories/aaAbP7IO1me');
+INSERT INTO Categories (Id, Description, Name, PluralName, PrimaryImage, URL) VALUES (9, '', 'Fuel', 'Fuels', '', '/categories/aaz2pacu708');
+INSERT INTO Categories (Id, Description, Name, PluralName, PrimaryImage, URL) VALUES (10, '', 'Parking', 'Parking', '', '/categories/aaxMPhpAo68');
+INSERT INTO Categories (Id, Description, Name, PluralName, PrimaryImage, URL) VALUES (11, '', 'Servicing', 'Servicing', '', '/categories/aaAqpp3ElAO');
+INSERT INTO Categories (Id, Description, Name, PluralName, PrimaryImage, URL) VALUES (12, '', 'Tire', 'Tires', '', '/categories/aaxsx67KMQS');
+INSERT INTO Categories (Id, Description, Name, PluralName, PrimaryImage, URL) VALUES (13, '', 'Tire Care', 'Tire Care', '', '/categories/aaAu93qLMjc');
+INSERT INTO Categories (Id, Description, Name, PluralName, PrimaryImage, URL) VALUES (14, '', 'Toilet', 'Toilet', '', '/categories/aaAr09qWgVM');
