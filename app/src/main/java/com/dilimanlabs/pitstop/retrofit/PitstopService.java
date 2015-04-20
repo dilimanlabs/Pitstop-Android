@@ -17,7 +17,9 @@ import retrofit.http.Multipart;
 import retrofit.http.POST;
 import retrofit.http.Part;
 import retrofit.http.Path;
+import retrofit.http.Query;
 import retrofit.mime.TypedFile;
+import rx.Observable;
 
 public interface PitstopService {
     public static final String API_URL = "http://pitstop.dilimanlabs.com/api";
@@ -32,7 +34,6 @@ public interface PitstopService {
     void getCategories(Callback<ResponseWrapper<CategoriesResponse>> cb);
 
     @GET("/markers/{tile}/")
-        //void listEstablishmentsFromTile(@Header("authToken") String authToken, @Path(value="tile", encode=false) String tile, Callback<ResponseWrapper<MarkersResponse>> cb);
     void listEstablishmentsFromTile(@Path(value = "tile", encode = false) String tile, Callback<ResponseWrapper<MarkersResponse>> cb);
 
     @GET("/{businessUrl}")
@@ -47,6 +48,9 @@ public interface PitstopService {
     @Multipart
     @POST("/account/{accountId}/images/")
     Response uploadImage(@Header("authToken") String authToken, @Path("accountId") String accountId, @Part("image") TypedFile image, @Part("title") String title);
+
+    @GET("/establishments/search")
+    Observable<ResponseWrapper<EstablishmentsResponse>> searchEstablishments(@Query("query") String query);
 
     public static class ResponseWrapper<E> {
         public Meta meta;
@@ -89,6 +93,10 @@ public interface PitstopService {
 
     public static class EstablishmentResponse {
         public Establishment establishment;
+    }
+
+    public static class EstablishmentsResponse {
+        public List<Establishment> establishments;
     }
 
     public static class PagesResponse {

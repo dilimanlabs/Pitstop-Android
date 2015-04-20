@@ -44,7 +44,7 @@ public class ExploreList extends FrameLayout{
 
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLongClickable(true);
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(getResources().getDrawable(R.drawable.divider)));
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(getResources().getDrawable(R.drawable.line_divider)));
     }
 
     public void setRecyclerViewAdapter(Adapter adapter) {

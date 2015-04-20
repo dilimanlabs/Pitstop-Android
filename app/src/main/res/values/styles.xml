@@ -12,7 +12,7 @@
 
         <!-- colorAccent is used as the default value for colorControlActivated
              which is used to tint widgets -->
-        <item name="colorAccent">@color/light_blue_500</item>
+        <item name="colorAccent">@color/purple_A700</item>
 
         <!-- You can also set colorControlNormal, colorControlActivated
              colorControlHighlight & colorSwitchThumbNormal. -->
@@ -22,7 +22,6 @@
         <!-- Material Dialog -->
         <item name="md_positive_color">@color/light_blue_500</item>
         <item name="md_negative_color">@color/black_secondary_text</item>
-
 
         <item name="toolbarStyle">@style/Custom.Widget.Toolbar</item>
         <item name="toolbarNavigationButtonStyle">@style/Custom.Widget.Toolbar.Button.Navigation</item>
@@ -63,6 +62,23 @@
     <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
         <item name="spinBars">false</item>
         <item name="color">@color/white</item>
+    </style>
+
+    <style name="AppTheme.Light" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="toolbarStyle">@style/Custom.Widget.Toolbar</item>
+        <item name="toolbarNavigationButtonStyle">@style/Custom.Widget.Toolbar.Button.Navigation</item>
+        <item name="actionOverflowButtonStyle">@style/Custom.Widget.ActionButton.Overflow</item>
+        <item name="windowActionModeOverlay">true</item>
+        <!--Action Mode styles -->
+        <item name="actionModeStyle">@style/Custom.Widget.ActionMode</item>
+        <item name="actionModeCloseButtonStyle">@style/Custom.Widget.ActionButton.CloseMode</item>
+
+        <item name="drawerArrowStyle">@style/DrawerArrowStyle.Light</item>
+    </style>
+
+    <style name="DrawerArrowStyle.Light" parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="spinBars">false</item>
+        <item name="color">@color/black</item>
     </style>
 
     <style name="ListPrimaryTextAppearance" parent="@android:style/TextAppearance">

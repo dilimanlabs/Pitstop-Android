@@ -1,5 +1,7 @@
 package com.dilimanlabs.pitstop.ui.explore;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -25,6 +27,7 @@ import com.dilimanlabs.pitstop.persistence.Business;
 import com.dilimanlabs.pitstop.persistence.Category;
 import com.dilimanlabs.pitstop.persistence.Establishment;
 import com.dilimanlabs.pitstop.retrofit.PitstopService;
+import com.dilimanlabs.pitstop.ui.SearchActivity;
 import com.dilimanlabs.pitstop.ui.common.BaseFragment;
 import com.dilimanlabs.pitstop.ui.explore.adapters.MyAdapter;
 import com.dilimanlabs.pitstop.ui.explore.tasks.AddMarkersAsyncTask;
@@ -71,6 +74,7 @@ import retrofit.client.Response;
 public class ExploreFragment extends BaseFragment implements GoogleMap.OnCameraChangeListener, GoogleMap.OnMarkerClickListener, GoogleMap.OnMapClickListener {
 
     public static String TAG = "Explore";
+    private static final int SEARCH_REQUEST = 1;
 
     @Inject
     JobManager mJobManager;
@@ -225,6 +229,16 @@ public class ExploreFragment extends BaseFragment implements GoogleMap.OnCameraC
     }
 
     @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        if (selectedCategories.length == 0) {
+            menu.findItem(R.id.action_filter_show).setIcon(R.drawable.ic_filter_light);
+        } else {
+            menu.findItem(R.id.action_filter_show).setIcon(R.drawable.ic_filter_highlight);
+        }
+    }
+
+    @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
@@ -280,6 +294,7 @@ public class ExploreFragment extends BaseFragment implements GoogleMap.OnCameraC
                                 selectedCategories = newSelectedCategories;
                                 updateMarkers(true);
 
+                                getActivity().invalidateOptionsMenu();
                                 return true;
                             }
                         })
@@ -307,10 +322,9 @@ public class ExploreFragment extends BaseFragment implements GoogleMap.OnCameraC
                 return true;
             }
             case R.id.action_search: {
-                new MaterialDialog.Builder(getActivity())
-                        .customView(R.layout.dialog_search, false)
-                        .positiveText("GOT IT")
-                        .show();
+                final android.content.Intent intent = new android.content.Intent(this.getActivity(), SearchActivity.class);
+                startActivityForResult(intent, SEARCH_REQUEST);
+                getActivity().overridePendingTransition(0, 0);
 
                 return true;
             }
@@ -343,6 +357,27 @@ public class ExploreFragment extends BaseFragment implements GoogleMap.OnCameraC
         }
 
         return false;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == SEARCH_REQUEST) {
+            if (resultCode == Activity.RESULT_OK) {
+
+                if (!mMarkers.containsValue(data.getStringExtra("ESTABLISHMENT_URL"))) {
+                    final Establishment est = Establishment.getEstablishmentByUrl(data.getStringExtra("ESTABLISHMENT_URL"));
+
+                    final Marker markerFoo = mMap.addMarker(new MarkerOptions()
+                            .position(new LatLng(est.lat, est.lon))
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker))
+                            .anchor(0.5f, 0.5f)
+                    );
+                    mMarkers.put(markerFoo, est.url);
+                }
+
+                onMarkerClick(mMarkers.inverse().get(data.getStringExtra("ESTABLISHMENT_URL")));
+            }
+        }
     }
 
     @Override

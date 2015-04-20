@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:res-auto="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:animateLayoutChanges="false"
+        android:minHeight="?attr/actionBarSize">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:background="@drawable/toolbar_bg_light"
+            android:minHeight="?attr/actionBarSize"
+            res-auto:contentInsetStart="@dimen/second_keyline"
+            res-auto:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            res-auto:titleTextAppearance="@style/TextAppearance.AppCompat.Title">
+
+            <EditText
+                android:id="@+id/search_view"
+                style="@style/Widget.AppCompat.EditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:imeOptions="actionSearch"
+                android:inputType="text"
+                android:lines="1"
+                android:maxLines="1"
+                android:scrollHorizontally="true"
+                android:singleLine="true"
+                android:textColor="@color/black_text"
+                android:textColorHint="@color/black_disabled_or_hint_text"/>
+
+        </android.support.v7.widget.Toolbar>
+
+        <com.pnikosis.materialishprogress.ProgressWheel
+            android:id="@+id/progress_wheel"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginLeft="@dimen/toolbar_horizontal_padding"
+            android:layout_gravity="left|center_vertical"
+            android:background="@color/white"
+            android:visibility="gone"
+            res-auto:matProg_barWidth="2dp"
+            res-auto:matProg_circleRadius="12dp"
+            res-auto:matProg_fillRadius="false"
+            res-auto:matProg_barColor="@color/purple_A700"
+            res-auto:matProg_progressIndeterminate="true"/>
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:animateLayoutChanges="false"
+        android:background="#ECECEC">
+
+        <com.devspark.robototextview.widget.RobotoTextView
+            android:id="@+id/message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/first_keyline"
+            android:layout_marginRight="@dimen/toolbar_horizontal_padding"
+            android:layout_marginTop="8dp"
+            android:gravity="top|left"
+            android:includeFontPadding="false"
+            android:textColor="@color/black_secondary_text"
+            android:textSize="14sp"
+            res-auto:typeface="roboto_regular"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingBottom="8dp"
+            android:paddingTop="8dp"
+            android:scrollbarStyle="outsideOverlay"
+            android:scrollbars="vertical"/>
+
+    </FrameLayout>
+
+</LinearLayout>
