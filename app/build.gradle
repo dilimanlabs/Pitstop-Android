@@ -5,7 +5,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.crashlytics.tools.gradle:crashlytics-gradle:1.+'
+        classpath 'com.crashlytics.tools.gradle:crashlytics-gradle:1.16.0'
         classpath 'me.tatarka:gradle-retrolambda:3.0.1'
     }
 }
@@ -42,8 +42,8 @@ android {
         applicationId "com.dilimanlabs.pitstop"
         minSdkVersion 16
         targetSdkVersion 21
-        versionCode 6
-        versionName "1.0-r"
+        versionCode 7
+        versionName "1.1-r"
     }
 
     buildTypes {
@@ -123,7 +123,7 @@ dependencies {
     compile 'org.lucasr.twowayview:layouts:1.0.0-SNAPSHOT@aar'
 
     compile 'com.astuetz:pagerslidingtabstrip:1.0.1'
-    compile 'com.crashlytics.android:crashlytics:1.+'
+    compile 'com.crashlytics.android:crashlytics:1.1.13'
     compile 'io.reactivex:rxjava:1.0.9'
     compile 'io.reactivex:rxandroid:0.24.0'
 }
