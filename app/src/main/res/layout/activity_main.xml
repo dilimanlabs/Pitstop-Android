@@ -20,9 +20,8 @@
             android:layout_width="match_parent"
             android:background="?attr/colorPrimary"
             android:minHeight="?attr/actionBarSize"
-            res-auto:contentInsetStart="@dimen/second_keyline"
-            res-auto:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            res-auto:titleTextAppearance="@style/TextAppearance.AppCompat.Title"/>
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            res-auto:contentInsetStart="@dimen/second_keyline"/>
 
 
         <FrameLayout
@@ -30,18 +29,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1" />
-
-        <!--
-                    <com.pnikosis.materialishprogress.ProgressWheel
-                            android:id="@+id/progress_wheel"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            res-auto:matProg_barWidth="2dp"
-                            res-auto:matProg_barColor="@color/light_blue_200"
-                            res-auto:matProg_progressIndeterminate="true"/>
-                    -->
-
-        <!-- Inflate appropriate views here via Java code -->
 
     </LinearLayout>
 

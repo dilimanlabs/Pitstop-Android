@@ -2,9 +2,9 @@
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:res-auto="http://schemas.android.com/apk/res-auto"
-    android:background="@color/black"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/black">
 
     <ImageView
         android:id="@+id/image"
@@ -13,13 +13,12 @@
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
-        android:layout_height="wrap_content"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="top"
         android:background="@color/scrim_dark"
         android:minHeight="?attr/actionBarSize"
-        res-auto:contentInsetStart="@dimen/second_keyline"
-        res-auto:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        res-auto:titleTextAppearance="@style/TextAppearance.AppCompat.Title"/>
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        res-auto:contentInsetStart="@dimen/second_keyline"/>
 
 </FrameLayout>

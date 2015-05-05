@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 
 import com.activeandroid.ActiveAndroid;
 import com.activeandroid.query.Delete;
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.dilimanlabs.pitstop.Pitstop;
 import com.dilimanlabs.pitstop.R;
 import com.dilimanlabs.pitstop.persistence.Account;
@@ -23,6 +22,7 @@ import com.dilimanlabs.pitstop.persistence.Location;
 import com.dilimanlabs.pitstop.persistence.Position;
 import com.dilimanlabs.pitstop.ui.StartActivity;
 import com.dilimanlabs.pitstop.ui.common.BaseFragment;
+import com.squareup.okhttp.Authenticator;
 
 import java.util.List;
 
@@ -63,7 +63,7 @@ public class AccountFragment extends BaseFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_logout: {
-                new MaterialDialog.Builder(getActivity())
+                /*new MaterialDialog.Builder(getActivity())
                         .title("Logout of Pitstop")
                         .content("Are you sure you want to leave?")
                         .positiveText("Logout")
@@ -102,7 +102,7 @@ public class AccountFragment extends BaseFragment {
                                 dialog.dismiss();
                             }
                         })
-                        .show();
+                        .show();*/
 
                 return true;
             } default: {

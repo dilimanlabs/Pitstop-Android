@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.dilimanlabs.pitstop.R;
 import com.dilimanlabs.pitstop.persistence.Business;
 import com.dilimanlabs.pitstop.persistence.Establishment;
+import com.dilimanlabs.pitstop.picasso.CircleTransform;
 import com.dilimanlabs.pitstop.ui.DetailsActivity;
 import com.facebook.rebound.SimpleSpringListener;
 import com.facebook.rebound.Spring;

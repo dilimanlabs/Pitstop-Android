@@ -1,5 +1,7 @@
 package com.dilimanlabs.pitstop.persistence;
 
+import android.graphics.Bitmap;
+
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
@@ -34,6 +36,8 @@ public class Establishment extends Model {
 
     @Column(name = "PrimaryImage")
     public String primaryImage;
+
+    public Bitmap primaryImageBitmap;
 
     @Column(name = "URL", unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
     public String url;

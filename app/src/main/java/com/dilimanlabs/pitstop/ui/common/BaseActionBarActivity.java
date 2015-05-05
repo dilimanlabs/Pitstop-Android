@@ -2,6 +2,7 @@ package com.dilimanlabs.pitstop.ui.common;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 
 import com.dilimanlabs.pitstop.Pitstop;
 
@@ -9,7 +10,7 @@ import java.util.List;
 
 import dagger.ObjectGraph;
 
-public abstract class BaseActionBarActivity extends ActionBarActivity{
+public abstract class BaseActionBarActivity extends AppCompatActivity {
     private ObjectGraph objectGraph;
 
     protected abstract List<Object> getModules();

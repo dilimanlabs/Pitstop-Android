@@ -2,11 +2,13 @@ package com.dilimanlabs.pitstop.ui.explore;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.AsyncTask;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,7 +16,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.dilimanlabs.androidlibrary.MapUtils;
 import com.dilimanlabs.androidlibrary.NetworkUtils;
 import com.dilimanlabs.pitstop.Pitstop;
@@ -26,6 +27,8 @@ import com.dilimanlabs.pitstop.okhttp.Headers;
 import com.dilimanlabs.pitstop.persistence.Business;
 import com.dilimanlabs.pitstop.persistence.Category;
 import com.dilimanlabs.pitstop.persistence.Establishment;
+import com.dilimanlabs.pitstop.picasso.CircleTransform;
+import com.dilimanlabs.pitstop.picasso.MarkerTransform;
 import com.dilimanlabs.pitstop.retrofit.PitstopService;
 import com.dilimanlabs.pitstop.ui.SearchActivity;
 import com.dilimanlabs.pitstop.ui.common.BaseFragment;
@@ -51,9 +54,11 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.path.android.jobqueue.JobManager;
+import com.squareup.picasso.Picasso;
 
 import org.lucasr.twowayview.ItemClickSupport;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -70,6 +75,11 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Header;
 import retrofit.client.Response;
+import rx.Observable;
+import rx.Subscription;
+import rx.android.app.AppObservable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class ExploreFragment extends BaseFragment implements GoogleMap.OnCameraChangeListener, GoogleMap.OnMarkerClickListener, GoogleMap.OnMapClickListener {
 
@@ -224,6 +234,15 @@ public class ExploreFragment extends BaseFragment implements GoogleMap.OnCameraC
     }
 
     @Override
+    public void onDestroyView() {
+        if (mSubscription != null) {
+            mSubscription.unsubscribe();
+        }
+
+        super.onDestroy();
+    }
+
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.fragment_explore, menu);
     }
@@ -264,29 +283,49 @@ public class ExploreFragment extends BaseFragment implements GoogleMap.OnCameraC
                     categoryUrls[i] = categories.get(i).url;
                 }
 
-                final Integer[] preselected = new Integer[selectedCategories.length];
+                final boolean[] preselected = new boolean[categories.size()];
                 for (int i = 0; i < categories.size(); i++) {
-                    for (int j = 0; j < selectedCategories.length; j++) {
-                        if (categoryUrls[i].equals(selectedCategories[j])) {
-                            preselected[j] = i;
+                    for (String cat : selectedCategories) {
+                        if (categoryUrls[i].equals(cat)) {
+                            preselected[i] = true;
                         }
                     }
                 }
 
-                new MaterialDialog.Builder(getActivity())
-                        .iconRes(R.drawable.ic_filter)
-                        .title("Filters")
-                        .items(categoryNames)
-                        .itemsCallbackMultiChoice(preselected, new MaterialDialog.ListCallbackMultiChoice() {
-                            @Override
-                            public boolean onSelection(MaterialDialog materialDialog, Integer[] which, CharSequence[] text) {
-                                final String[] newSelectedCategories = new String[text.length];
+                new AlertDialog.Builder(getActivity(), R.style.AppCompatAlertDialogStyle)
+                        .setIcon(R.drawable.ic_filter)
+                        .setTitle("Filters")
+                        .setMultiChoiceItems(categoryNames, preselected, (dialog, which, isChecked) -> {
+                            preselected[which] = isChecked;
+                        }).
+                        setPositiveButton("OK", (dialog, which) -> {
+                            if (which == AlertDialog.BUTTON_POSITIVE) {
+                                int count = 0;
+                                for (boolean pre : preselected) {
+                                    if (pre) {
+                                        count++;
+                                    }
+                                }
+
+                                String[] text = new String[count];
                                 int i = 0;
+                                int j = 0;
+                                for (boolean asda: preselected) {
+                                    if (asda) {
+                                        text[i] = categoryNames[j];
+                                        i++;
+                                    }
+
+                                    j++;
+                                }
+
+                                final String[] newSelectedCategories = new String[text.length];
+                                int k = 0;
                                 for (CharSequence name : text) {
                                     for (Category category : categories) {
                                         if (name.toString().equals(category.name)) {
-                                            newSelectedCategories[i] = category.url;
-                                            i++;
+                                            newSelectedCategories[k] = category.url;
+                                            k++;
                                         }
                                     }
                                 }
@@ -295,11 +334,9 @@ public class ExploreFragment extends BaseFragment implements GoogleMap.OnCameraC
                                 updateMarkers(true);
 
                                 getActivity().invalidateOptionsMenu();
-                                return true;
                             }
                         })
-                        .negativeText("CANCEL")
-                        .positiveText("OK")
+                        .setNegativeButton("CANCEL", null)
                         .show();
 
                 ((Pitstop) getActivity().getApplication()).getPitstopService().getCategories(new Callback<PitstopService.ResponseWrapper<PitstopService.CategoriesResponse>>() {
@@ -426,7 +463,8 @@ public class ExploreFragment extends BaseFragment implements GoogleMap.OnCameraC
             hideCard();
         }
 
-        cancelAddMarkers();
+        // TODO
+        //cancelAddMarkers();
 
         final float zoom = mMap.getCameraPosition().zoom;
         final LatLngBounds bounds = mMap.getProjection().getVisibleRegion().latLngBounds;
@@ -459,17 +497,53 @@ public class ExploreFragment extends BaseFragment implements GoogleMap.OnCameraC
         }
     }
 
+    private Subscription mSubscription;
     private void addMarkers() {
-        cancelAddMarkers();
-        mAddMarkersAsyncTask = new AddMarkersAsyncTask(mMap, mMarkers, selectedCategories);
-        mAddMarkersAsyncTask.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
-    }
-
-    private void cancelAddMarkers() {
-        if (mAddMarkersAsyncTask != null) {
-            mAddMarkersAsyncTask.cancel(true);
-            mAddMarkersAsyncTask = null;
+        if (mSubscription != null) {
+            mSubscription.unsubscribe();
         }
+
+        Picasso picasso = Picasso.with(this.getActivity());
+        BitmapDescriptor defaultIcon = BitmapDescriptorFactory.fromResource(R.drawable.ic_marker);
+
+        List<Establishment> establishments = Establishment.getEstablishmentsWithinBoundsWithCategories(mMap.getProjection().getVisibleRegion().latLngBounds, Arrays.asList(selectedCategories));
+        mSubscription = AppObservable.bindFragment(this, Observable.from(establishments)
+                .filter(est -> !mMarkers.containsValue(est.url))
+                .subscribeOn(Schedulers.io())
+                .map(est -> {
+                    if (!"".equals(est.primaryImage)) {
+                        est.primaryImage = "http://pitstop.dilimanlabs.com/api"
+                                + est.primaryImage
+                                + ".png"
+                                + "?"
+                                + "height=" + (int) getResources().getDimension(R.dimen.dp20);
+                    }
+                    return est;
+                })
+                .subscribeOn(Schedulers.io())
+                .map(est -> {
+                    if (!"".equals(est.primaryImage)) {
+                        try {
+                            picasso.load(est.primaryImage).transform(new CircleTransform()).transform(new MarkerTransform()).fetch();
+                            est.primaryImageBitmap = picasso.load(est.primaryImage).transform(new CircleTransform()).transform(new MarkerTransform()).get();
+                        } catch (IOException e) {
+                            est.primaryImageBitmap = null;
+                        }
+                    }
+
+                    return est;
+                }))
+                .subscribeOn(Schedulers.io())
+                .subscribe(est -> {
+                    Marker markerFoo = mMap.addMarker(
+                            new MarkerOptions()
+                                    .position(new LatLng(est.lat, est.lon))
+                                    .icon(est.primaryImageBitmap != null ? BitmapDescriptorFactory.fromBitmap(est.primaryImageBitmap) : defaultIcon)
+                                    .anchor(0.5f, 0.5f)
+                    );
+
+                    mMarkers.put(markerFoo, est.url);
+                });
     }
 
     public void displayCard(String markerIdUrl) {

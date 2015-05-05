@@ -1,7 +1,7 @@
 package com.dilimanlabs.pitstop.ui;
 
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -14,7 +14,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
-public class ImageActivity extends ActionBarActivity {
+public class ImageActivity extends AppCompatActivity {
     @InjectView(R.id.toolbar)
     public Toolbar mToolbar;
 

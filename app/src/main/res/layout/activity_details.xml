@@ -13,9 +13,8 @@
         android:layout_gravity="top"
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
-        res-auto:contentInsetStart="@dimen/second_keyline"
-        res-auto:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        res-auto:titleTextAppearance="@style/TextAppearance.AppCompat.Title"/>
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        res-auto:contentInsetStart="@dimen/second_keyline"/>
 
     <com.astuetz.PagerSlidingTabStrip
         android:id="@+id/tabs"

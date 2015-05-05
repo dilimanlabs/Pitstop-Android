@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.media.ThumbnailUtils;
 
 import com.squareup.picasso.Transformation;
 
@@ -12,12 +13,14 @@ public class CircleTransform implements Transformation {
 
     @Override
     public Bitmap transform(Bitmap source) {
-        int size = Math.min(source.getWidth(), source.getHeight());
+        int size = Math.max(source.getWidth(), source.getHeight());
 
         this.x = (source.getWidth() - size) / 2;
         this.y = (source.getHeight() - size) / 2;
 
-        Bitmap squaredBitmap = Bitmap.createBitmap(source, x, y, size, size);
+        //Bitmap squaredBitmap = Bitmap.createBitmap(source, x, y, size, size);
+        Bitmap squaredBitmap = ThumbnailUtils.extractThumbnail(source, size, size);
+
         if (squaredBitmap != source) {
             source.recycle();
         }

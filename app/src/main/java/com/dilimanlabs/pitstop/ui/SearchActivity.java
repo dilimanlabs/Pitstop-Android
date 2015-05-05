@@ -1,28 +1,21 @@
 package com.dilimanlabs.pitstop.ui;
 
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.activeandroid.util.Log;
 import com.devspark.robototextview.widget.RobotoTextView;
-import com.dilimanlabs.androidlibrary.NetworkUtils;
 import com.dilimanlabs.pitstop.Pitstop;
 import com.dilimanlabs.pitstop.R;
-import com.dilimanlabs.pitstop.events.SearchEstablishmentsEvent;
 import com.dilimanlabs.pitstop.persistence.Establishment;
 import com.dilimanlabs.pitstop.retrofit.PitstopService;
 import com.dilimanlabs.pitstop.ui.widgets.SearchResultsAdapter;
@@ -34,16 +27,12 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import de.greenrobot.event.EventBus;
-import retrofit.RetrofitError;
-import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.android.view.ViewObservable;
 import rx.android.widget.WidgetObservable;
 import rx.schedulers.Schedulers;
 import rx.subjects.BehaviorSubject;
 
-public class SearchActivity extends ActionBarActivity {
+public class SearchActivity extends AppCompatActivity {
 
     @InjectView(R.id.toolbar)
     public Toolbar mToolbar;

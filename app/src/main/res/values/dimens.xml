@@ -10,6 +10,8 @@
     <dimen name="dp6">6dp</dimen>
     <dimen name="dp8">8dp</dimen>
     <dimen name="dp16">16dp</dimen>
+    <dimen name="dp20">20dp</dimen>
+    <dimen name="dp24">24dp</dimen>
     <dimen name="dp40">40dp</dimen>
     <dimen name="dp56">56dp</dimen>
     <dimen name="dp72">72dp</dimen>

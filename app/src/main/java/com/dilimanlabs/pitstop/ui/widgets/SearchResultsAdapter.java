@@ -2,7 +2,7 @@ package com.dilimanlabs.pitstop.ui.widgets;
 
 import android.app.Activity;
 import android.content.Context;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -99,8 +99,8 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
                         final android.content.Intent resultIntent = new android.content.Intent();
                         resultIntent.putExtra("ESTABLISHMENT_URL", establishment.url);
-                        ((ActionBarActivity) mContext).setResult(Activity.RESULT_OK, resultIntent);
-                        ((ActionBarActivity) mContext).finish();
+                        ((AppCompatActivity) mContext).setResult(Activity.RESULT_OK, resultIntent);
+                        ((AppCompatActivity) mContext).finish();
                     }
                 });
 

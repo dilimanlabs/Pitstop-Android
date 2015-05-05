@@ -3,13 +3,15 @@ package com.dilimanlabs.pitstop.ui;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.astuetz.PagerSlidingTabStrip;
 import com.dilimanlabs.pitstop.Pitstop;
 import com.dilimanlabs.pitstop.R;
@@ -31,7 +33,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import de.greenrobot.event.EventBus;
 
-public class DetailsActivity extends ActionBarActivity {
+public class DetailsActivity extends AppCompatActivity {
 
     //@Inject
     //JobManager mJobManager;
@@ -105,18 +107,21 @@ public class DetailsActivity extends ActionBarActivity {
             }
             case R.id.action_details: {
                 if (mEst != null) {
-                    final MaterialDialog dialog = new MaterialDialog.Builder(this)
-                            .title(mEst.name)
-                            .titleColorRes(R.color.light_blue_500)
-                            .customView(R.layout.dialog_est, true).build();
 
-                    final View customView = dialog.getCustomView();
-                    ((TextView) customView.findViewById(R.id.address)).setText(mEst.location.address);
-                    ((TextView) customView.findViewById(R.id.cityOrMunicipality)).setText(mEst.location.cityOrMunicipality);
-                    ((TextView) customView.findViewById(R.id.country)).setText(mEst.location.country);
-                    ((TextView) customView.findViewById(R.id.cc)).setText(mEst.location.cc);
+                    final AlertDialog d = new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle)
+                            .setTitle(mEst.name)
+                            .create();
 
-                    dialog.show();
+                    final View li = getLayoutInflater().inflate(R.layout.dialog_est, null);
+                    ((TextView) li.findViewById(R.id.address)).setText(mEst.location.address);
+                    ((TextView) li.findViewById(R.id.cityOrMunicipality)).setText(mEst.location.cityOrMunicipality);
+                    ((TextView) li.findViewById(R.id.country)).setText(mEst.location.country);
+                    ((TextView) li.findViewById(R.id.cc)).setText(mEst.location.cc);
+
+                    int dp20 = (int) getResources().getDimension(R.dimen.dp20);
+                    int dp24 = (int) getResources().getDimension(R.dimen.dp24);
+                    d.setView(li, dp24, dp20, dp24, dp24);
+                    d.show();
                 }
 
                 return true;
