@@ -9,24 +9,24 @@
 
     <item android:state_checked="true" android:state_pressed="true"
           android:state_enabled="true"
-          android:drawable="@color/light_blue_A200" />
+          android:drawable="@color/blue_A200" />
     <item android:state_checked="false" android:state_pressed="true"
           android:state_enabled="true"
-          android:drawable="@color/light_blue_A200" />
+          android:drawable="@color/blue_A200" />
 
     <item android:state_checked="true" android:state_focused="true"
           android:state_enabled="true"
-          android:drawable="@color/light_blue_A200" />
+          android:drawable="@color/blue_A200" />
     <item android:state_checked="false" android:state_focused="true"
           android:state_enabled="true"
-          android:drawable="@color/light_blue_A200" />
+          android:drawable="@color/blue_A200" />
 
     <item android:state_checked="false"
           android:state_enabled="true"
           android:drawable="@color/transparent" />
     <item android:state_checked="true"
           android:state_enabled="true"
-          android:drawable="@color/light_blue_A200" />
+          android:drawable="@color/blue_A200" />
 
     <!-- Disabled states -->
 

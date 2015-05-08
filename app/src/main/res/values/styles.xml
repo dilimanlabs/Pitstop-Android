@@ -1,8 +1,8 @@
 <resources>
 
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">@color/light_blue_500</item>
-        <item name="colorPrimaryDark">@color/light_blue_900</item>
+        <item name="colorPrimary">@color/blue_500</item>
+        <item name="colorPrimaryDark">@color/blue_900</item>
         <item name="colorAccent">@color/purple_A700</item>
 
         <!-- You can also set colorControlNormal, colorControlActivated

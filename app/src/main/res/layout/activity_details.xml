@@ -20,7 +20,7 @@
         android:id="@+id/tabs"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:background="@color/light_blue_500"
+        android:background="@color/blue_500"
         res-auto:pstsIndicatorColor="@color/purple_A700"
         res-auto:pstsUnderlineColor="@color/transparent"
         res-auto:pstsDividerColor="@color/transparent"

@@ -20,8 +20,11 @@
             android:animateLayoutChanges="true"
             android:orientation="horizontal">
 
+            <!--
+            android:background="@color/black_dividers"
+            -->
             <ImageView
-                android:background="@color/black_dividers"
+
                 android:id="@+id/estImage"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
@@ -57,7 +60,7 @@
                     android:ellipsize="end"
                     android:gravity="bottom|left"
                     android:includeFontPadding="false"
-                    android:textColor="@color/light_blue_500"
+                    android:textColor="@color/blue_500"
                     res-auto:typeface="roboto_medium"/>
 
                 </LinearLayout>
