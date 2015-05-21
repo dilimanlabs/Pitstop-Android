@@ -2,12 +2,11 @@ package com.dilimanlabs.pitstop.ui.explore;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -25,6 +24,7 @@ import com.dilimanlabs.pitstop.events.FetchMarkersEndEvent;
 import com.dilimanlabs.pitstop.jobs.FetchMarkersJob;
 import com.dilimanlabs.pitstop.okhttp.Headers;
 import com.dilimanlabs.pitstop.persistence.Business;
+import com.dilimanlabs.pitstop.persistence.CameraBundle;
 import com.dilimanlabs.pitstop.persistence.Category;
 import com.dilimanlabs.pitstop.persistence.Establishment;
 import com.dilimanlabs.pitstop.picasso.CircleTransform;
@@ -33,7 +33,6 @@ import com.dilimanlabs.pitstop.retrofit.PitstopService;
 import com.dilimanlabs.pitstop.ui.SearchActivity;
 import com.dilimanlabs.pitstop.ui.common.BaseFragment;
 import com.dilimanlabs.pitstop.ui.explore.adapters.MyAdapter;
-import com.dilimanlabs.pitstop.ui.explore.tasks.AddMarkersAsyncTask;
 import com.dilimanlabs.pitstop.ui.explore.widgets.ExploreList;
 import com.dilimanlabs.pitstop.ui.explore.widgets.InfoCard;
 import com.facebook.rebound.SimpleSpringListener;
@@ -64,6 +63,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
@@ -78,10 +78,12 @@ import retrofit.client.Response;
 import rx.Observable;
 import rx.Subscription;
 import rx.android.app.AppObservable;
+import rx.android.lifecycle.LifecycleEvent;
+import rx.android.lifecycle.LifecycleObservable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class ExploreFragment extends BaseFragment implements GoogleMap.OnCameraChangeListener, GoogleMap.OnMarkerClickListener, GoogleMap.OnMapClickListener {
+public class ExploreFragment extends BaseFragment implements GoogleMap.OnMarkerClickListener, GoogleMap.OnMapClickListener, OnMapReadyCallback {
 
     public static String TAG = "Explore";
     private static final int SEARCH_REQUEST = 1;
@@ -90,7 +92,7 @@ public class ExploreFragment extends BaseFragment implements GoogleMap.OnCameraC
     JobManager mJobManager;
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
-    private String[] selectedCategories = new String[]{};
+    private String[] mSelectedCategories = new String[]{};
 
     @InjectView(R.id.card)
     InfoCard mInfoCard;
@@ -114,8 +116,6 @@ public class ExploreFragment extends BaseFragment implements GoogleMap.OnCameraC
 
     private Spring mSpring;
 
-    private AddMarkersAsyncTask mAddMarkersAsyncTask;
-
     private BiMap<Marker, String> mMarkers = HashBiMap.create();
     private String mOpenedMarkerUrl = null;
     private Marker mOpenedMarkerIndicator = null;
@@ -125,6 +125,8 @@ public class ExploreFragment extends BaseFragment implements GoogleMap.OnCameraC
 
     public CameraPosition mInitCameraPosition;
 
+    private Observable<CameraBundle> mMapObservable;
+
     public ExploreFragment() {
 
     }
@@ -133,6 +135,13 @@ public class ExploreFragment extends BaseFragment implements GoogleMap.OnCameraC
         final Fragment fragment = new ExploreFragment();
 
         return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        setRetainInstance(true);
     }
 
     @Override
@@ -162,29 +171,7 @@ public class ExploreFragment extends BaseFragment implements GoogleMap.OnCameraC
                 .replace(R.id.map, fragment, "Map")
                 .commit();
 
-        fragment.getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(GoogleMap googleMap) {
-                mMap = googleMap;
-
-                mMap.getUiSettings().setZoomControlsEnabled(true);
-                mMap.getUiSettings().setMapToolbarEnabled(false);
-
-                mMap.setMyLocationEnabled(true);
-                mMap.setOnCameraChangeListener(ExploreFragment.this);
-                mMap.setOnMarkerClickListener(ExploreFragment.this);
-                mMap.setOnMapClickListener(ExploreFragment.this);
-
-                if (mInitCameraPosition != null) {
-                    mMap.moveCamera(CameraUpdateFactory.
-                            newLatLngZoom(mInitCameraPosition.target, mInitCameraPosition.zoom));
-                }
-
-                if (mOpenedMarkerUrl != null) {
-                    displayCard(mOpenedMarkerUrl);
-                }
-            }
-        });
+        fragment.getMapAsync(this);
 
         final SpringSystem ss = SpringSystem.create();
         mSpring = ss.createSpring().setSpringConfig(SpringConfig.fromOrigamiTensionAndFriction(40, 5));
@@ -199,21 +186,9 @@ public class ExploreFragment extends BaseFragment implements GoogleMap.OnCameraC
         mArrayList = new ArrayList<>();
         mExploreList.setRecyclerViewAdapter(new MyAdapter(getActivity(), mArrayList));
         ItemClickSupport itemClickSupport = mExploreList.getItemClickSupport();
-        itemClickSupport.setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
-            @Override
-            public void onItemClick(RecyclerView recyclerView, View view, int i, long l) {
-                displayCard(((MyAdapter) recyclerView.getAdapter()).getItem(i));
-            }
-        });
+        itemClickSupport.setOnItemClickListener((recyclerView, view, i, l) -> displayCard(((MyAdapter) recyclerView.getAdapter()).getItem(i)));
 
-        itemClickSupport.setOnItemLongClickListener(new ItemClickSupport.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(RecyclerView recyclerView, View view, int i, long l) {
-
-                return true;
-            }
-        });
-
+        itemClickSupport.setOnItemLongClickListener((recyclerView, view, i, l) -> true);
 
         return rootView;
     }
@@ -235,9 +210,13 @@ public class ExploreFragment extends BaseFragment implements GoogleMap.OnCameraC
 
     @Override
     public void onDestroyView() {
-        if (mSubscription != null) {
+        /*if (mSubscription != null) {
             mSubscription.unsubscribe();
-        }
+        }*/
+
+        /*if(mMapSub != null) {
+            mMapSub.unsubscribe();
+        }*/
 
         super.onDestroy();
     }
@@ -250,7 +229,7 @@ public class ExploreFragment extends BaseFragment implements GoogleMap.OnCameraC
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        if (selectedCategories.length == 0) {
+        if (mSelectedCategories.length == 0) {
             menu.findItem(R.id.action_filter_show).setIcon(R.drawable.ic_filter_light);
         } else {
             menu.findItem(R.id.action_filter_show).setIcon(R.drawable.ic_filter_highlight);
@@ -285,7 +264,7 @@ public class ExploreFragment extends BaseFragment implements GoogleMap.OnCameraC
 
                 final boolean[] preselected = new boolean[categories.size()];
                 for (int i = 0; i < categories.size(); i++) {
-                    for (String cat : selectedCategories) {
+                    for (String cat : mSelectedCategories) {
                         if (categoryUrls[i].equals(cat)) {
                             preselected[i] = true;
                         }
@@ -330,8 +309,18 @@ public class ExploreFragment extends BaseFragment implements GoogleMap.OnCameraC
                                     }
                                 }
 
-                                selectedCategories = newSelectedCategories;
-                                updateMarkers(true);
+                                mSelectedCategories = newSelectedCategories;
+
+                                hideCard();
+
+                                Iterator<Map.Entry<Marker, String>> iterator = mMarkers.entrySet().iterator();
+                                while (iterator.hasNext()) {
+                                    Map.Entry<Marker, String> item_ = iterator.next();
+
+                                    item_.getKey().remove();
+                                    iterator.remove();
+                                }
+                                mMap.moveCamera(CameraUpdateFactory.newCameraPosition(mMap.getCameraPosition()));
 
                                 getActivity().invalidateOptionsMenu();
                             }
@@ -401,29 +390,118 @@ public class ExploreFragment extends BaseFragment implements GoogleMap.OnCameraC
         if (requestCode == SEARCH_REQUEST) {
             if (resultCode == Activity.RESULT_OK) {
 
-                if (!mMarkers.containsValue(data.getStringExtra("ESTABLISHMENT_URL"))) {
-                    final Establishment est = Establishment.getEstablishmentByUrl(data.getStringExtra("ESTABLISHMENT_URL"));
+                if (mMarkers.containsValue(data.getStringExtra("ESTABLISHMENT_URL"))) {
+                    onMarkerClick(mMarkers.inverse().get(data.getStringExtra("ESTABLISHMENT_URL")));
+                } else {
+                    final Establishment establishment = Establishment.getEstablishmentByUrl(data.getStringExtra("ESTABLISHMENT_URL"));
 
-                    final Marker markerFoo = mMap.addMarker(new MarkerOptions()
-                            .position(new LatLng(est.lat, est.lon))
-                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker))
-                            .anchor(0.5f, 0.5f)
-                    );
-                    mMarkers.put(markerFoo, est.url);
+                    final Observable<Establishment> o = Observable.just(establishment)
+                            .map(est -> {
+                                if (!"".equals(est.primaryImage)) {
+                                    est.primaryImage = "http://pitstop.dilimanlabs.com/api"
+                                            + est.primaryImage
+                                            + ".png"
+                                            + "?"
+                                            + "min=" + (int) getResources().getDimension(R.dimen.dp20);
+                                }
+
+                                return est;
+                            })
+                            .map(est -> {
+                                if (!"".equals(est.primaryImage)) {
+                                    try {
+                                        Picasso picasso = Picasso.with(getActivity());
+
+                                        picasso.load(est.primaryImage).transform(new CircleTransform()).transform(new MarkerTransform()).fetch();
+                                        est.primaryImageBitmap = picasso.load(est.primaryImage).transform(new CircleTransform()).transform(new MarkerTransform()).get();
+                                    } catch (IOException e) {
+                                        est.primaryImageBitmap = new MarkerTransform().transform(new CircleTransform().transform(BitmapFactory.decodeResource(getResources(), R.drawable.marker)));
+                                    }
+                                } else {
+                                    est.primaryImageBitmap = new MarkerTransform().transform(new CircleTransform().transform(BitmapFactory.decodeResource(getResources(), R.drawable.marker)));
+                                }
+
+                                return est;
+                            })
+                            .subscribeOn(Schedulers.io());
+
+                    LifecycleObservable.bindFragmentLifecycle(lifecycle(), AppObservable.bindFragment(this,o))
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(est -> {
+                                Marker markerFoo = mMap.addMarker(new MarkerOptions()
+                                        .position(new LatLng(est.lat, est.lon))
+                                        .icon(BitmapDescriptorFactory.fromBitmap(est.primaryImageBitmap))
+                                        .anchor(0.5f, 0.5f));
+
+                                mMarkers.put(markerFoo, est.url);
+                                onMarkerClick(mMarkers.inverse().get(data.getStringExtra("ESTABLISHMENT_URL")));
+                            });
                 }
-
-                onMarkerClick(mMarkers.inverse().get(data.getStringExtra("ESTABLISHMENT_URL")));
             }
         }
     }
 
+
+    //Subscription mMapSub = null;
     @Override
-    public void onCameraChange(CameraPosition cameraPosition) {
-        if (cameraPosition.zoom >= MapUtils.MIN_ZOOM) {
-            fetchMarkers();
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+
+        mMap.getUiSettings().setZoomControlsEnabled(true);
+        mMap.getUiSettings().setMapToolbarEnabled(false);
+
+        mMap.setMyLocationEnabled(true);
+        mMap.setOnMarkerClickListener(ExploreFragment.this);
+        mMap.setOnMapClickListener(ExploreFragment.this);
+
+        final Observable<CameraBundle> o = Observable.<CameraBundle>create(subscriber -> {
+            if (!subscriber.isUnsubscribed()) {
+                mMap.setOnCameraChangeListener(cameraPosition ->
+                        subscriber.onNext(new CameraBundle(mMap.getProjection().getVisibleRegion().latLngBounds, cameraPosition.zoom)));
+            }
+        })
+                .onErrorResumeNext(Observable.<CameraBundle>empty())
+                .debounce(1, TimeUnit.SECONDS)
+                .subscribeOn(AndroidSchedulers.mainThread());
+
+        //mMapSub =
+                bindLifecycle(o, LifecycleEvent.DESTROY)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(cameraBundle -> {
+                    Log.d("zoom", "" + cameraBundle.zoom);
+
+                    if (cameraBundle.zoom >= MapUtils.MIN_ZOOM) {
+                        fetchMarkers(cameraBundle.latLngBounds);
+                    }
+
+                    boolean checkOpenedMarker = (mOpenedMarkerUrl != null);
+
+                    Iterator<Map.Entry<Marker, String>> iterator = mMarkers.entrySet().iterator();
+                    while (iterator.hasNext()) {
+                        Map.Entry<Marker, String> item = iterator.next();
+
+                        if (checkOpenedMarker && item.getValue().equals(mOpenedMarkerUrl)) {
+                            // do not remove
+                            checkOpenedMarker = false;
+                        } else if (cameraBundle.zoom < MapUtils.MIN_ZOOM || !cameraBundle.latLngBounds.contains(item.getKey().getPosition())) {
+                            item.getKey().remove();
+                            iterator.remove();
+                        }
+                    }
+
+                    if (cameraBundle.zoom >= MapUtils.MIN_ZOOM) {
+                        addMarkers(cameraBundle.latLngBounds, mSelectedCategories);
+                    }
+                });
+
+        if (mInitCameraPosition != null) {
+            mMap.moveCamera(CameraUpdateFactory.
+                    newLatLngZoom(mInitCameraPosition.target, mInitCameraPosition.zoom));
         }
 
-        updateMarkers(false);
+        if (mOpenedMarkerUrl != null) {
+            displayCard(mOpenedMarkerUrl);
+        }
     }
 
     @Override
@@ -438,109 +516,57 @@ public class ExploreFragment extends BaseFragment implements GoogleMap.OnCameraC
         hideCard();
     }
 
-    private void fetchMarkers() {
+    private void fetchMarkers(LatLngBounds latLngBounds) {
         if (NetworkUtils.isNetworkAvailable(getActivity())) {
-            /*final Account account = Account.getAccount();
-            if (account != null) {
-                mJobManager.addJobInBackground(
-                        new FetchMarkersJob(
-                                mMap.getProjection().getVisibleRegion().latLngBounds,
-                                account.authToken
-                        )
-                );
-            }*/
-            mJobManager.addJobInBackground(
-                    new FetchMarkersJob(
-                            mMap.getProjection().getVisibleRegion().latLngBounds,
-                            ""
-                    )
-            );
-        }
-    }
-
-    private void updateMarkers(boolean clearall) {
-        if (clearall) {
-            hideCard();
-        }
-
-        // TODO
-        //cancelAddMarkers();
-
-        final float zoom = mMap.getCameraPosition().zoom;
-        final LatLngBounds bounds = mMap.getProjection().getVisibleRegion().latLngBounds;
-        boolean doNotSkip = (mOpenedMarkerUrl != null);
-
-        Iterator<Map.Entry<Marker, String>> iterator = mMarkers.entrySet().iterator();
-
-        while (iterator.hasNext()) {
-            Map.Entry<Marker, String> item = iterator.next();
-
-            if (clearall) {
-                item.getKey().remove();
-                iterator.remove();
-                continue;
-            }
-
-            if (doNotSkip && item.getValue().equals(mOpenedMarkerUrl)) {
-                // do not remove
-                doNotSkip = false;
-            } else if (zoom < MapUtils.MIN_ZOOM || !bounds.contains(item.getKey().getPosition())) {
-                item.getKey().remove();
-                iterator.remove();
-            } else {
-                // else do not remove
-            }
-        }
-
-        if (zoom >= MapUtils.MIN_ZOOM) {
-            addMarkers();
+            mJobManager.addJobInBackground(new FetchMarkersJob(latLngBounds, ""));
         }
     }
 
     private Subscription mSubscription;
-    private void addMarkers() {
+    private void addMarkers(LatLngBounds latLngBounds, String[] selectedCategories) {
         if (mSubscription != null) {
             mSubscription.unsubscribe();
         }
 
         Picasso picasso = Picasso.with(this.getActivity());
-        BitmapDescriptor defaultIcon = BitmapDescriptorFactory.fromResource(R.drawable.ic_marker);
 
-        List<Establishment> establishments = Establishment.getEstablishmentsWithinBoundsWithCategories(mMap.getProjection().getVisibleRegion().latLngBounds, Arrays.asList(selectedCategories));
-        mSubscription = AppObservable.bindFragment(this, Observable.from(establishments)
+        List<Establishment> establishments = Establishment.getEstablishmentsWithinBoundsWithCategories(latLngBounds, Arrays.asList(selectedCategories));
+        final Observable<Establishment> o = Observable.from(establishments)
                 .filter(est -> !mMarkers.containsValue(est.url))
-                .subscribeOn(Schedulers.io())
                 .map(est -> {
                     if (!"".equals(est.primaryImage)) {
                         est.primaryImage = "http://pitstop.dilimanlabs.com/api"
                                 + est.primaryImage
                                 + ".png"
                                 + "?"
-                                + "height=" + (int) getResources().getDimension(R.dimen.dp20);
+                                + "min=" + (int) getResources().getDimension(R.dimen.dp20);
                     }
+
                     return est;
                 })
-                .subscribeOn(Schedulers.io())
                 .map(est -> {
                     if (!"".equals(est.primaryImage)) {
                         try {
                             picasso.load(est.primaryImage).transform(new CircleTransform()).transform(new MarkerTransform()).fetch();
                             est.primaryImageBitmap = picasso.load(est.primaryImage).transform(new CircleTransform()).transform(new MarkerTransform()).get();
                         } catch (IOException e) {
-                            est.primaryImageBitmap = null;
+                            est.primaryImageBitmap = new MarkerTransform().transform(new CircleTransform().transform(BitmapFactory.decodeResource(getResources(), R.drawable.marker)));
                         }
+                    } else {
+                        est.primaryImageBitmap = new MarkerTransform().transform(new CircleTransform().transform(BitmapFactory.decodeResource(getResources(), R.drawable.marker)));
                     }
 
                     return est;
-                }))
-                .subscribeOn(Schedulers.io())
+                })
+                .subscribeOn(Schedulers.io());
+
+        mSubscription = LifecycleObservable.bindFragmentLifecycle(lifecycle(), AppObservable.bindFragment(this,o))
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(est -> {
-                    Marker markerFoo = mMap.addMarker(
-                            new MarkerOptions()
-                                    .position(new LatLng(est.lat, est.lon))
-                                    .icon(est.primaryImageBitmap != null ? BitmapDescriptorFactory.fromBitmap(est.primaryImageBitmap) : defaultIcon)
-                                    .anchor(0.5f, 0.5f)
-                    );
+                    Marker markerFoo = mMap.addMarker(new MarkerOptions()
+                            .position(new LatLng(est.lat, est.lon))
+                            .icon(BitmapDescriptorFactory.fromBitmap(est.primaryImageBitmap))
+                            .anchor(0.5f, 0.5f));
 
                     mMarkers.put(markerFoo, est.url);
                 });
@@ -589,7 +615,7 @@ public class ExploreFragment extends BaseFragment implements GoogleMap.OnCameraC
 
     @SuppressWarnings("UnusedDeclaration")
     public void onEventMainThread(FetchMarkersEndEvent event) {
-        updateMarkers(false);
+        mMap.moveCamera(CameraUpdateFactory.newCameraPosition(mMap.getCameraPosition()));
     }
 
     @SuppressWarnings("UnusedDeclaration")

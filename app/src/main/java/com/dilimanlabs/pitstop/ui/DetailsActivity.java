@@ -1,6 +1,7 @@
 package com.dilimanlabs.pitstop.ui;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AlertDialog;
@@ -35,21 +36,10 @@ import de.greenrobot.event.EventBus;
 
 public class DetailsActivity extends AppCompatActivity {
 
-    //@Inject
-    //JobManager mJobManager;
-
     @InjectView(R.id.toolbar)
     public Toolbar mToolbar;
 
-    @InjectView(R.id.tabs)
-    public PagerSlidingTabStrip mTabs;
-
-    @InjectView(R.id.viewpager)
-    public ViewPager mViewPager;
-
     private Establishment mEst;
-    private Business mBiz;
-    private List<Page> mPages;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,12 +50,9 @@ public class DetailsActivity extends AppCompatActivity {
 
         final Bundle data = getIntent().getBundleExtra("DATA");
         mEst = Establishment.getEstablishmentByUrl(data.getString("EST_URL"));
-        applyEst();
-
-        final String estUrl = getIntent().getBundleExtra("DATA").getString("EST_URL");
-        final String bizUrl = estUrl.substring(0, "/businesses/12345678910".length());
-        mBiz = Business.getBusinessByUrl(bizUrl);
-        applyBiz();
+        if (mEst == null) {
+            finish();
+        }
 
         mToolbar.setTitle("");
         setSupportActionBar(mToolbar);
@@ -79,16 +66,11 @@ public class DetailsActivity extends AppCompatActivity {
         //getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        ((Pitstop) getApplication()).getJobManager().addJob(new GetEstablishmentJob(estUrl));
-        ((Pitstop) getApplication()).getJobManager().addJob(new GetBusinessJob(bizUrl));
-        ((Pitstop) getApplication()).getJobManager().addJob(new GetPagesJob(bizUrl));
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        EventBus.getDefault().register(this);
+        if (getSupportFragmentManager().findFragmentByTag("DETAILS_FRAGMENT") == null) {
+            final FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.fragment_stub, DetailsFragment.newInstance(data.getString("EST_URL")), "DETAILS_FRAGMENT");
+            ft.commit();
+        }
     }
 
     @Override
@@ -130,67 +112,5 @@ public class DetailsActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
             }
         }
-    }
-
-    @Override
-    protected void onPause() {
-        EventBus.getDefault().unregister(this);
-
-        super.onPause();
-    }
-
-    private void applyEst() {
-        if (mEst != null) {
-            //mHeaderTitle.setText(mEst.name);
-            //mAddress.setText(mEst.location.address);
-
-            if (!"".equals(mEst.primaryImage)) {
-                final String imageUrl =
-                        "http://pitstop.dilimanlabs.com/api"
-                                + mEst.primaryImage
-                                + ".png";
-                //+ "?"
-                //+ "height=" + (int) getResources().getDimension(R.dimen.dp40)
-                //+ "&"
-                //+ "width=" + (int) getResources().getDimension(R.dimen.dp40);
-
-                final Picasso picasso = Picasso.with(this);
-                //picasso.load(imageUrl).fit().centerCrop().into(mBanner);
-            }
-        } else {
-            finish();
-        }
-    }
-
-    private void applyBiz() {
-        if (mBiz != null) {
-            //mToolbar.setSubtitle(mBiz.name);
-        }
-    }
-
-    @SuppressWarnings("UnusedDeclaration")
-    public void onEventMainThread(GetEstablishmentEvent event) {
-        if (event.establishment.url.equals(getIntent().getBundleExtra("DATA").getString("EST_URL"))) {
-            mEst = event.establishment;
-            applyEst();
-        }
-    }
-
-    @SuppressWarnings("UnusedDeclaration")
-    public void onEventMainThread(GetBusinessEvent event) {
-        final String estUrl = getIntent().getBundleExtra("DATA").getString("EST_URL");
-        final String bizUrl = estUrl.substring(0, "/businesses/12345678910".length()); //TODO improve
-        if (event.business.url.equals(bizUrl)) {
-            mBiz = event.business;
-            applyBiz();
-        }
-    }
-
-    @SuppressWarnings("UnusedDeclaration")
-    public void onEventMainThread(GetPagesEvent event) {
-        mTabs.setTextColorResource(R.color.white_text);
-        mViewPager.setAdapter(new PageFragmentPagerAdapter(getSupportFragmentManager(), event.pages));
-        mViewPager.setOffscreenPageLimit(5);
-        mTabs.setViewPager(mViewPager);
     }
 }

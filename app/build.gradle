@@ -2,6 +2,7 @@ buildscript {
     repositories {
         maven { url 'http://download.crashlytics.com/maven' }
         mavenCentral()
+        jcenter()
     }
 
     dependencies {
@@ -13,6 +14,7 @@ buildscript {
 apply plugin: 'com.android.application'
 apply plugin: 'crashlytics'
 apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'android-apt'
 
 repositories {
     maven { url 'http://download.crashlytics.com/maven' }
@@ -42,8 +44,8 @@ android {
         applicationId "com.dilimanlabs.pitstop"
         minSdkVersion 16
         targetSdkVersion 21
-        versionCode 7
-        versionName "1.1-r"
+        versionCode 8
+        versionName "1.2-r"
     }
 
     buildTypes {
@@ -125,4 +127,7 @@ dependencies {
     compile 'com.crashlytics.android:crashlytics:1.1.13'
     compile 'io.reactivex:rxjava:1.0.9'
     compile 'io.reactivex:rxandroid:0.24.0'
+
+    compile 'com.github.frankiesardo:auto-parcel:+'
+    apt 'com.github.frankiesardo:auto-parcel-processor:+'
 }

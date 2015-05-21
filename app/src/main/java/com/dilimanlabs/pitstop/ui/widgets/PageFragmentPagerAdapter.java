@@ -16,6 +16,7 @@ public class PageFragmentPagerAdapter extends FragmentPagerAdapter {
 
     public PageFragmentPagerAdapter(FragmentManager fm, List<Page> pages) {
         super(fm);
+
         if (pages != null) {
             Collections.sort(pages, new PagesComparator());
         }
@@ -24,6 +25,7 @@ public class PageFragmentPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
+
         PageFragment pageFragment = PageFragment.newInstance(mPages.get(position));
 
         /*for (Page page : mPages) {

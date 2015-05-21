@@ -53,6 +53,7 @@ public interface PitstopService {
     Observable<ResponseWrapper<EstablishmentsResponse>> searchEstablishments(@Query("query") String query);
 
     public static class ResponseWrapper<E> {
+        public List<retrofit.client.Header> headers;
         public Meta meta;
         public E response;
     }

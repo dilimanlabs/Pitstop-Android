@@ -117,7 +117,7 @@ public class Pitstop extends Application{
                     }
                 })
                 .setEndpoint(PitstopService.API_URL)
-                .setLogLevel(RestAdapter.LogLevel.FULL)
+                //.setLogLevel(RestAdapter.LogLevel.FULL)
                 .setClient(new OkClient(okHttpClient))
                 .build()
                 .create(PitstopService.class);
@@ -131,7 +131,7 @@ public class Pitstop extends Application{
                         objectGraph.inject(baseJob);
                     }
                 })
-                .customLogger(new CustomLogger() {
+                /*.customLogger(new CustomLogger() {
                     private static final String TAG = "JOBS";
                     @Override
                     public boolean isDebugEnabled() {
@@ -152,7 +152,7 @@ public class Pitstop extends Application{
                     public void e(String text, Object... args) {
                         Log.e(TAG, String.format(text, args));
                     }
-                })
+                })*/
                 .minConsumerCount(1)//always keep at least one consumer alive
                 .maxConsumerCount(3)//up to 3 consumers at a time
                 .loadFactor(3)//3 jobs per consumer

@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class MapUtils {
     public static int TILE_ZOOM = 15;
-    public static float MIN_ZOOM = 13.0f; // minimum zoom level to enable markers
+    public static float MIN_ZOOM = 14.0f; // minimum zoom level to enable markers
     public static float VERY_MIN_ZOOM = 7.0f;
 
     private static float LOW_MID_ZOOM_LEVEL_BOUNDARY = 11.0f;

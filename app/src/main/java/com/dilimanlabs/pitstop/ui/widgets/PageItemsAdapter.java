@@ -19,7 +19,7 @@ import android.widget.TextView;
 import com.devspark.robototextview.util.RobotoTextViewUtils;
 import com.devspark.robototextview.util.RobotoTypefaceManager;
 import com.dilimanlabs.pitstop.R;
-import com.dilimanlabs.pitstop.persistence.Product;
+import com.dilimanlabs.pitstop.persistence.ProductParcel;
 import com.dilimanlabs.pitstop.ui.ImageActivity;
 import com.squareup.picasso.Picasso;
 
@@ -64,11 +64,11 @@ public class PageItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private Context mContext;
 
     private String mDescription;
-    private List<Product> mProducts;
+    private List<ProductParcel> mProducts;
 
     private boolean mHasHeader = false;
 
-    public PageItemsAdapter(Context context, String description, List<Product> products) {
+    public PageItemsAdapter(Context context, String description, List<ProductParcel> products) {
         mContext = context;
 
         mDescription = description;
@@ -125,7 +125,7 @@ public class PageItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             case 1: {
                 final int adjustedPosition = position - (mHasHeader ? 1 : 0);
 
-                Product product = mProducts.get(adjustedPosition);
+                ProductParcel product = mProducts.get(adjustedPosition);
                 /*for (Product prod : mProducts) {
                     if (prod.order == adjustedPosition) {
                         product = prod;
@@ -136,16 +136,16 @@ public class PageItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     product = mProducts.get(adjustedPosition);
                 }*/
 
-                if (!TextUtils.isEmpty(product.primaryImage)) {
+                if (!TextUtils.isEmpty(product.getPrimaryImage())) {
                     final String imageUrl =
                             "http://pitstop.dilimanlabs.com/api"
-                                    + product.primaryImage
+                                    + product.getPrimaryImage()
                                     + ".png";
 
                     final Picasso picasso = Picasso.with(mContext);
                     picasso.load(imageUrl).fit().centerCrop().into(((ProductViewHolder) holder).primaryImage);
                 }
-                final String productPrimaryImage = product.primaryImage;
+                final String productPrimaryImage = product.getPrimaryImage();
                 ((ProductViewHolder) holder).primaryImage.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -160,11 +160,11 @@ public class PageItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     }
                 });
 
-                ((ProductViewHolder) holder).name.setText(product.name);
+                ((ProductViewHolder) holder).name.setText(product.getName());
 
-                ((ProductViewHolder) holder).description.setText(product.description);
+                ((ProductViewHolder) holder).description.setText(product.getDescription());
 
-                for (final com.dilimanlabs.pitstop.persistence.Intent intent : product.intents) {
+                for (final com.dilimanlabs.pitstop.persistence.Intent intent : product.getIntents()) {
                     final TextView btn = new TextView(mContext);
 
                     Typeface typeface = RobotoTypefaceManager.obtainTypeface(
@@ -213,10 +213,10 @@ public class PageItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         return (mHasHeader ? 1 : 0) + (mProducts == null ? 0 : mProducts.size());
     }
 
-    public static class ProductsComparator implements Comparator<Product> {
+    public static class ProductsComparator implements Comparator<ProductParcel> {
         @Override
-        public int compare(Product lhs, Product rhs) {
-            return Integer.valueOf(lhs.order).compareTo(rhs.order);
+        public int compare(ProductParcel lhs, ProductParcel rhs) {
+            return Integer.valueOf(lhs.getOrder()).compareTo(rhs.getOrder());
         }
     }
 }

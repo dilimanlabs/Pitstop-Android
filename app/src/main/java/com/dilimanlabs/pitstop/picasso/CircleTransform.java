@@ -13,7 +13,7 @@ public class CircleTransform implements Transformation {
 
     @Override
     public Bitmap transform(Bitmap source) {
-        int size = Math.max(source.getWidth(), source.getHeight());
+        int size = Math.min(source.getWidth(), source.getHeight());
 
         this.x = (source.getWidth() - size) / 2;
         this.y = (source.getHeight() - size) / 2;

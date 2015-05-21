@@ -82,7 +82,7 @@ public class SearchActivity extends AppCompatActivity {
                 .doOnNext(e -> invalidateOptionsMenu())
                 .map(e -> e.text().toString())
                 .filter(s -> s.length() >= 3)
-                .debounce(1000, TimeUnit.MILLISECONDS)
+                .debounce(1, TimeUnit.SECONDS)
                 .subscribe(s -> asd.onNext(s));
 
         asd.subscribeOn(Schedulers.io())
