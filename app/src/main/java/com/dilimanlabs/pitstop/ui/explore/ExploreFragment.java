@@ -398,7 +398,7 @@ public class ExploreFragment extends BaseFragment implements GoogleMap.OnMarkerC
                     final Observable<Establishment> o = Observable.just(establishment)
                             .map(est -> {
                                 if (!"".equals(est.primaryImage)) {
-                                    est.primaryImage = "http://pitstop.dilimanlabs.com/api"
+                                    est.primaryImage = "http://usepitstop.com"
                                             + est.primaryImage
                                             + ".png"
                                             + "?"
@@ -535,7 +535,7 @@ public class ExploreFragment extends BaseFragment implements GoogleMap.OnMarkerC
                 .filter(est -> !mMarkers.containsValue(est.url))
                 .map(est -> {
                     if (!"".equals(est.primaryImage)) {
-                        est.primaryImage = "http://pitstop.dilimanlabs.com/api"
+                        est.primaryImage = "http://usepitstop.com"
                                 + est.primaryImage
                                 + ".png"
                                 + "?"

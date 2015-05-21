@@ -120,7 +120,7 @@ public class InfoCard extends CardView {
 
         if (!"".equals(est.primaryImage)) {
             final String imageUrl =
-                    "http://pitstop.dilimanlabs.com/api"
+                    "http://usepitstop.com"
                             + est.primaryImage
                             + ".png";
                             //+ "?"

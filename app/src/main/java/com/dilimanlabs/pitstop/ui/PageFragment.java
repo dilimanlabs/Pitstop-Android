@@ -87,7 +87,7 @@ public class PageFragment extends BaseFragment {
 
         if (!"".equals(primaryImage)) {
             final String imageUrl =
-                    "http://pitstop.dilimanlabs.com/api"
+                    "http://usepitstop.com"
                             + primaryImage
                             + ".png";
 

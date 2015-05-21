@@ -44,8 +44,8 @@ android {
         applicationId "com.dilimanlabs.pitstop"
         minSdkVersion 16
         targetSdkVersion 21
-        versionCode 8
-        versionName "1.2-r"
+        versionCode 9
+        versionName "1.3-r"
     }
 
     buildTypes {

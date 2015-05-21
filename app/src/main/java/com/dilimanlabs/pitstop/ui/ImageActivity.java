@@ -37,7 +37,7 @@ public class ImageActivity extends AppCompatActivity {
 
 
         final String imageUrl =
-                "http://pitstop.dilimanlabs.com/api"
+                "http://usepitstop.com"
                         + imgUrl
                         + ".png";
 

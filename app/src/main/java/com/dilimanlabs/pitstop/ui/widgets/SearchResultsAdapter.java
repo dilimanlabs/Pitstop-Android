@@ -75,7 +75,7 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
                 if (!TextUtils.isEmpty(establishment.primaryImage)) {
                     final String imageUrl =
-                            "http://pitstop.dilimanlabs.com/api"
+                            "http://usepitstop.com"
                                     + establishment.primaryImage
                                     + ".png";
 

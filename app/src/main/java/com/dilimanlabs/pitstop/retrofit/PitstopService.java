@@ -22,7 +22,7 @@ import retrofit.mime.TypedFile;
 import rx.Observable;
 
 public interface PitstopService {
-    public static final String API_URL = "http://pitstop.dilimanlabs.com/api";
+    public static final String API_URL = "http://api.usepitstop.com";
 
     @POST("/login/")
     ResponseWrapper<AccountSigninResponse> accountSignin(@Body AccountWrapper accountWrapper);

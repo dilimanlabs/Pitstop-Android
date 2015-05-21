@@ -138,7 +138,7 @@ public class PageItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
                 if (!TextUtils.isEmpty(product.getPrimaryImage())) {
                     final String imageUrl =
-                            "http://pitstop.dilimanlabs.com/api"
+                            "http://usepitstop.com"
                                     + product.getPrimaryImage()
                                     + ".png";
 
